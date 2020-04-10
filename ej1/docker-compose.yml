@@ -1,0 +1,107 @@
+version: "2"
+services:
+
+  neptune:
+    build: ./nodo
+    container_name: neptune
+    hostname: neptune
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+        ipv4_address: 172.20.254.104
+
+  bender:
+    build: ./nodo
+    container_name: bender
+    hostname: bender
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+        ipv4_address: 172.20.254.200
+
+  uranus:
+    build: ./nodo
+    container_name: uranus
+    hostname: uranus
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+        ipv4_address: 172.20.254.106
+
+  smtp:
+    build: ./nodo
+    container_name: smtp
+    hostname: smtp
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+
+  sparc:
+    build: ./nodo
+    container_name: sparc
+    hostname: sparc
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+        ipv4_address: 172.20.254.111
+
+  backup:
+    build: ./nodo
+    container_name: backup
+    hostname: backup
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+
+  firewall:
+    build: ./firewall
+    container_name: firewall
+    hostname: firewall
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+        ipv4_address: 172.20.254.101
+      interna:
+        ipv4_address: 172.16.0.101
+      internet:
+
+  pc1:
+    build: ./nodo
+    container_name: pc1
+    hostname: pc1
+    stdin_open: true
+    tty: true
+    networks:
+      interna:
+
+  pc2:
+    build: ./nodo
+    container_name: pc2
+    hostname: pc2
+    stdin_open: true
+    tty: true
+    networks:
+      interna:
+
+networks:
+  interna:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.0.0/16
+          gateway: 172.16.0.254
+  dmz:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.254.0/24
+          gateway: 172.20.254.254
+  internet:
+

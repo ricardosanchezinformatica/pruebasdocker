@@ -1,0 +1,47 @@
+version: "3"
+services:
+
+  pcadmin:
+    image: busybox
+    container_name: pcadmin 
+    hostname: pcadmin
+    stdin_open: true
+    tty: true
+    networks:
+      - interna
+
+  pcuser:
+    image: busybox
+    container_name: pcuser
+    hostname: pcuser
+    stdin_open: true
+    tty: true
+    networks:
+      - interna
+
+  servermysql:
+    image: mysql
+    container_name: servermysql
+    hostname: servermysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    networks:
+      - dmz
+
+  serverpostgres:
+    image: postgres
+    container_name: serverpostgres
+    hostname: serverpostgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - dmz
+
+networks:
+  interna:
+  dmz:
+

@@ -1,0 +1,19 @@
+la experiencia ha sido realmente frustrante:
+-Primero instalé snort con apt-snort, e hice una rueba con tcp: snort detectaba 1 de cada 200 paquetes, y no lo cortaba
+
+-Después insalé en el nodo "prueba" a patir de los fuentes, e hice una prueba con ping -> $HOME_NET:
+ -El ping son dos peticiones: icmp. Las detectaba en ambos sentidos, pero sólo cortabaen uno de los dos sentidos
+ -Después hie prueba con tcp: ni lo detectaba ni lo cortaba. Al arrancar con -v se veía perfectamente que los aquetes sí ls estaba viendo, pero en ningún momento los reconocícomo paquetes con el patrón que yo había definido
+
+Tengo bastante y esto no es tan importante. Hasta aquí hemos llegado.
+
+Algunas notas sobre infraestructura:
+-Mi punto de partida ha sido este: https://www.youtube.com/watch?v=enSll_9Bjag
+-Dos redes, la 192.168.1.0/24 y la 192.168.0.0/24. La $HOME_NET es la primera
+-A la hora de arrancar, funciona exactamente igual si pones eth0:eth1 que si pones eth1:eth0. Arranque con snort -Q -v -c /etc/snort/snort.conf -i eth1:eth0 -A console (el -v es opcional, muestra todos los paquetes de red)
+
+Hay por ahí alguna cosa de que requiere ciertas tarjetas de red. Pero no tiene sentido quereconozca icmp y no tcp.
+
+
+Para otro año probarel vídeo siguiente: https://www.youtube.com/watch?v=41HLTF-8omU&t=449s
+En este caso sí se ve como funciona, pero no utiliza afpacket sino daq, y esto requiere además configuración de iptables

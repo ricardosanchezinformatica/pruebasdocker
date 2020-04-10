@@ -1,0 +1,35 @@
+con el otro del vsftpd no ha habido forma (no funcionaba ni antes de instalar iptables), pero con el el pure-fptd este ha ido muy bien. Aún así, merece la pena documentarlo porque tiene su miga.
+
+Básicamente, tras el docker-compose up tenemos un usuario username/mypass funcionando, y tal como tengo eldocker-compose con los volúmenes, al hacer un ls tiene que mostrarse y poder transferirse un fichero datos.txt
+
+Pero claro, este alpine no tiene un cliente de ftp, y esto es lo necesario para instalarlo y ejecutarlo:
+docker exec -it pcadmin /bin/sh
+apk add lftp
+lftp username@pure-ftpd (pide contraseña, mypass, y después funcionan el ls y el get). Por defecto funcionen modo pasivo
+
+Si queremos probarlo con iptables, lo fáci es tirar de ip's, o habilitar el udp 53 para dns. Yo he tirado con ip's
+Sería esto
+docker exec --privileged -it pcadmin /bin/sh
+apk install iptables
+iptables -P INPUT DROP
+iptables -A INPUT -m state --state=ESTABLISHED,RELATED -j ACCEPT
+lftp username@172.21.0.3 (todo funciona)
+
+Podemos ir aún un paso más lejos, y stringir la salida solamente al rango de puertos que usa el ftp (vienen en el docker-compose):
+iptables -P OUTPUT DROP
+iptables -A OUTPUT -p tcp --dport 21 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 30000:30009 -j ACCEPT
+lftp username@172.21.0.3 (todo funciona)
+
+Y se puede ir más lejos todavía, y en el servidor ftpermitir solamente el tráfico ftp:
+docker exec --privileged -it pure-ftpd /bin/sh
+apt update
+apt install iptables
+iptables -P INPUT DROP
+iptables -A INPUT -p tcp --dport 21 -j ACCEPT
+iptables -A INPUT -p tcp --dport 30000:30009 -j ACCEPT
+iptables -P OUTPUT DROP
+iptables -A OUTPUT -p tcp --sport 21 -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 30000:30009 -j ACCEPT 
+
+Si volvemos a pcadmin, el ftp por ip sigue funcionando

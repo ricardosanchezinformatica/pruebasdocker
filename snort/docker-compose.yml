@@ -1,0 +1,61 @@
+version: "2"
+services:
+
+  atacante:
+    build: ./nodo
+    container_name: atacante
+    hostname: atacante
+    stdin_open: true
+    tty: true
+    networks:
+      externa:
+        ipv4_address: 192.168.1.11
+
+  firewall:
+    build: ./firewall
+    container_name: firewall
+    hostname: firewall
+    stdin_open: true
+    tty: true
+    networks:
+      interna:
+        ipv4_address: 192.168.0.1
+      externa:
+        ipv4_address: 192.168.1.1
+
+  prueba:
+    build: ./prueba
+    container_name: prueba
+    hostname: prueba
+    stdin_open: true
+    tty: true
+    networks:
+      interna:
+        ipv4_address: 192.168.0.1
+      externa:
+        ipv4_address: 192.168.1.1
+
+  servidor:
+    build: ./nodo
+    container_name: servidor
+    hostname: servidor
+    stdin_open: true
+    tty: true
+    networks:
+      interna:
+        ipv4_address: 192.168.0.11
+
+networks:
+  interna:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/24
+          gateway: 192.168.0.254
+  externa:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.254
+

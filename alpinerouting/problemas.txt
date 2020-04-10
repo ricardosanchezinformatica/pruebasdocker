@@ -1,0 +1,6 @@
+en primer lugar, el ncat en docker no va fino, no me deja poner el comando exacto que quería, que es este:
+ncat -l 3306 -k -c 'echo bienvenido al servicio mysql;xargs -n1 echo servermysql: ' &
+
+en segundo lugar, el ncat se arranca de tal manera que si alguien hace un exit tras un telnet, el contenedor se muere. Lo de arriba bueno, pero esto me obliga a arrancarlo fuera del docker-compose y por tanto dentro del script de comandos
+
+por último,para asegurarme de que todo el mundo escriba los mismos comandos (y poder tener una corrección más sencilla en el futuro), necesito que las ip's sean las mismas, y eso me va a obligar a tener ip's estáticas. Esto ya lo prueo en otra carpeta

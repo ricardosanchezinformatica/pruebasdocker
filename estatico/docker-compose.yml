@@ -1,0 +1,55 @@
+version: "2"
+services:
+
+  pcadmin:
+    build: ./nodo
+    container_name: pcadmin 
+    hostname: pcadmin
+    stdin_open: true
+    tty: true
+    networks:
+      interna:
+        ipv4_address: 192.168.0.11
+
+  firewall:
+    build: ./firewall
+    container_name: firewall
+    hostname: firewall
+    stdin_open: true
+    tty: true
+    networks:
+      interna:
+        ipv4_address: 192.168.0.1
+      dmz:
+        ipv4_address: 192.168.1.1
+      internet:
+
+  servermysql:
+    build: ./nodo
+    container_name: servermysql
+    hostname: servermysql
+    stdin_open: true
+    tty: true
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    networks:
+      dmz:
+        ipv4_address: 192.168.1.11
+
+networks:
+  interna:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/24
+          gateway: 192.168.0.254
+  dmz:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.254
+  internet:
+

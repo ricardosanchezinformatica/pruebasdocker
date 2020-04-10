@@ -1,0 +1,140 @@
+version: "2"
+services:
+
+  luke:
+    build: ./nodo
+    container_name: luke
+    hostname: luke
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+        ipv4_address: 192.168.0.1
+
+  anakin:
+    build: ./nodo
+    container_name: anakin
+    hostname: anakin
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+        ipv4_address: 192.168.0.2
+
+  hansolo:
+    build: ./nodo
+    container_name: hansolo
+    hostname: hansolo
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+        ipv4_address: 192.168.0.3
+
+  yoda:
+    build: ./nodo
+    container_name: yoda
+    hostname: yoda
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+        ipv4_address: 192.168.0.4
+
+  chewbacca:
+    build: ./nodo
+    container_name: chewbacca
+    hostname: chewbacca
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+        ipv4_address: 192.168.0.5
+
+  fw1:
+    build: ./firewall
+    container_name: fw1
+    hostname: fw1
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+        ipv4_address: 192.168.0.200
+      internet:
+
+  bacula:
+    build: ./nodo
+    container_name: bacula
+    hostname: bacula
+    stdin_open: true
+    tty: true
+    networks:
+      interna172:
+        ipv4_address: 172.16.0.200
+
+  pcadminitdesa:
+    build: ./nodo
+    container_name: pcadminitdesa
+    hostname: pcadminitdesa
+    stdin_open: true
+    tty: true
+    networks:
+      interna172:
+        ipv4_address: 172.16.0.1
+
+  fw2:
+    build: ./firewall
+    container_name: fw2
+    hostname: fw2
+    stdin_open: true
+    tty: true
+    networks:
+      dmz:
+        ipv4_address: 192.168.0.100
+      interna172:
+        ipv4_address: 172.16.0.100
+      interna10:
+        ipv4_address: 10.0.0.100
+
+  pcuser1:
+    build: ./nodo
+    container_name: pcuser1
+    hostname: pcuser1
+    stdin_open: true
+    tty: true
+    networks:
+      interna10:
+        ipv4_address: 10.0.0.1
+
+  pcuser2:
+    build: ./nodo
+    container_name: pcuser2
+    hostname: pcuser2
+    stdin_open: true
+    tty: true
+    networks:
+      interna10:
+        ipv4_address: 10.0.0.2
+
+networks:
+  interna10:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.0.0/8
+          gateway: 10.10.0.254
+
+  interna172:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.0.0/16
+          gateway: 172.16.0.254
+  dmz:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/24
+          gateway: 192.168.0.254
+  internet:
+
